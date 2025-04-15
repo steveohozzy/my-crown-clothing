@@ -89,7 +89,7 @@ const SignUpForm = () => {
                 <FormInput
                     name="confirmPassword"
                     label="Confirm Password"
-                    type="passwordl"
+                    type="password"
                     required
                     onChange={handleChange}
                     value={confirmPassword}
