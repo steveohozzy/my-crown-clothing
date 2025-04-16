@@ -23,30 +23,77 @@ const addCartItem = (cartItems, productToAdd) => {
     ]
 }
 
+const removeCartItem = (cartItems, cartItemToRemove) => {
+    const existingCartItem = cartItems.find(
+        (cartItem) => cartItem.id === cartItemToRemove.id
+    );
+
+    //If quantity was 1 remove as it is now 0
+    if(existingCartItem.quantity === 1) {
+        return (
+            cartItems.filter((cartItem) => 
+                cartItem.id !== cartItemToRemove.id)
+        )
+    }
+
+    // if quantity was more than 1 reduce quantity
+    return (
+        cartItems.map((cartItem) => 
+            cartItem.id === cartItemToRemove.id
+                ? {...cartItem, quantity: cartItem.quantity - 1}
+                : cartItem
+        )
+    )
+}
+
+const deleteCartItem = (cartItems, cartItemToDelete) => {
+    return (
+        cartItems.filter((cartItem) => 
+            cartItem.id !== cartItemToDelete.id)
+    )
+}
+
 // as the actual value you want to access
 export const CartContext = createContext({
     isCartOpen: false,
     setIsCartOpen: () => {},
     cartItems: [],
     addItemToCart: () => {},
-    cartCount: 0
+    cartCount: 0,
+    removeItemFromCart: () => {},
+    deleteItemFromCart: () => {},
+    cartTotal: 0
 })
 
 export const CartProvider = ({children}) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [cartCount, setCartCount] = useState(0);
+    const [cartTotal, setCartTotal] = useState(0);
 
     useEffect(() => {
         const newCartCount = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0)
         setCartCount(newCartCount)
     }, [cartItems])
 
+    useEffect(() => {
+        const newCartTotal = cartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0)
+        setCartTotal(newCartTotal)
+    }, [cartItems])
+
     const addItemToCart = (productToAdd) => {
         setCartItems(addCartItem(cartItems, productToAdd))
     }
 
-    const value = { isCartOpen, setIsCartOpen, addItemToCart, cartItems, cartCount };
+    const removeItemFromCart = (productToRemove) => {
+        setCartItems(removeCartItem(cartItems, productToRemove))
+    }
+
+    const deleteItemFromCart = (productToDelete) => {
+        setCartItems(deleteCartItem(cartItems, productToDelete))
+    }
+
+    const value = { isCartOpen, setIsCartOpen, addItemToCart, cartItems, cartCount, removeItemFromCart, deleteItemFromCart, cartTotal };
     
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
