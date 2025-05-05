@@ -1,4 +1,5 @@
-import { createContext, useReducer } from "react"
+import { createContext, useReducer } from "react";
+import {createAction} from '../utils/reducer/reducter.utils'
 // before reducer and unused vars
 //import { createContext, useEffect, useState, useReducer } from "react"
 
@@ -124,7 +125,13 @@ export const CartProvider = ({children}) => {
         
         const newCartTotal = newCartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0);
 
-        dispatch({ type: CART_ACTION_TYPES.SET_CART_ITEMS, payload: { cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount }})
+        dispatch(
+            createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
+                cartItems: newCartItems,
+                cartTotal: newCartTotal,
+                cartCount: newCartCount
+            })
+        )
     }
 
     const addItemToCart = (productToAdd) => {
@@ -143,7 +150,9 @@ export const CartProvider = ({children}) => {
     }
 
     const setIsCartOpen = (bool) => {
-        dispatch({ type: CART_ACTION_TYPES.SET_IS_CART_OPEN, payload: bool })
+        dispatch(
+            createAction( CART_ACTION_TYPES.SET_IS_CART_OPEN, bool )
+        )
     }
 
     // before reducer changes
