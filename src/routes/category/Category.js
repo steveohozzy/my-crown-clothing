@@ -1,13 +1,14 @@
 import { useParams } from 'react-router-dom'
-import { useContext, useState, useEffect } from "react";
-import {CategoriesContext} from '../../contexts/CategoriesContext';
+import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 
+import { selectCategoriesMap } from "../../store/categories/categoriesSelector";
 import ProductCard from '../../components/productCard/ProductCard';
 import { CategoryContainer, CategoryTitle } from './categoryStyles';
 
 const Category = () => {
     const { category }  = useParams();
-    const {categoriesMap} = useContext(CategoriesContext);
+    const categoriesMap = useSelector(selectCategoriesMap);
     const [products, setProducts] = useState(categoriesMap[category]);
 
     useEffect(() => {
@@ -20,7 +21,7 @@ const Category = () => {
             {
             products &&  products.map((product) => {
                     return (
-                        <ProductCard product={product} />
+                        <ProductCard product={product} key={product.id} />
                     )
                 })
             }
