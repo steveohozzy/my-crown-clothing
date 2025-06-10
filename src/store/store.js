@@ -5,16 +5,17 @@ import storage from 'redux-persist/lib/storage';
 
 import { rootReducer } from "./root-reducer";
 import { loggerMiddleware } from "./middleware/logger";
+import { thunk } from "redux-thunk";
 
 const persistConfig = {
     key: 'root',
     storage: storage,
     blacklist: ['user']
-}
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middleWares = [process.env.NODE_ENV !== 'production' && loggerMiddleware].filter(Boolean);
+const middleWares = [process.env.NODE_ENV !== 'production' && loggerMiddleware, thunk].filter(Boolean);
 
 // added to use chrome extension redux devtools
 const composeEnhancer = (process.env.NODE_ENV !== 'production' && window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
