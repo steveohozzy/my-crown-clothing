@@ -10,7 +10,9 @@ import { thunk } from "redux-thunk";
 const persistConfig = {
     key: 'root',
     storage: storage,
-    blacklist: ['user']
+    whitelist: ['cart']
+    // below was caching cats etc whitelist above means only the cart is cached
+    //blacklist: ['user']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
